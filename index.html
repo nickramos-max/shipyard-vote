@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vote: Shipyard Halloween Pet Photo Shoot</title>
+<meta name="description" content="Pick your top 3 costumes from the Shipyard Halloween Pet Photo Shoot.">
+<meta property="og:title" content="Vote for the best costume!">
+<meta property="og:description" content="Shipyard Halloween Pet Photo Shoot. Pick your top 3.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500;1,9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ SETTINGS ============
+     Paste your Google Apps Script Web app URL below.
+     Leave it empty to preview the page with sample pets. */
+</style>
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwN_sxO_awMXjPmbggPtLp4jyKHPi3Nxgk483jKqDVU02GIakq6s9FF4zmoBFipT6pGg/exec";
+</script>
+<style>
+  :root{
+    --bg:#14110f;
+    --bg-2:#1d1915;
+    --card:#221d18;
+    --line:#3a322a;
+    --ink:#f6efe4;
+    --muted:#b7aa98;
+    --pumpkin:#ff7a1a;
+    --pumpkin-deep:#e2600a;
+    --gold:#f5c04a;
+    --silver:#cfd5dc;
+    --bronze:#d38a55;
+    --radius:18px;
+    --tray-h:0px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -200px, #3a1e0a 0%, transparent 70%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"DM Sans",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:calc(var(--tray-h) + env(safe-area-inset-bottom));
+  }
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+
+  /* header */
+  header{padding:44px 0 18px;text-align:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--pumpkin);font-weight:700;
+  }
+  .eyebrow::before,.eyebrow::after{content:"";width:22px;height:1px;background:currentColor;opacity:.6}
+  h1{
+    font-family:"Fraunces",Georgia,serif;font-weight:600;
+    font-size:clamp(34px,7vw,64px);line-height:1.02;letter-spacing:-.01em;
+    margin:14px 0 12px;
+  }
+  h1 em{font-style:italic;font-weight:700;color:var(--pumpkin)}
+  .lede{color:var(--muted);font-size:17px;max-width:520px;margin:0 auto;line-height:1.5}
+  .how{
+    display:flex;justify-content:center;flex-wrap:wrap;gap:8px 18px;
+    margin:22px 0 4px;padding:0;list-style:none;font-size:14px;color:var(--muted);
+  }
+  .how li{display:flex;align-items:center;gap:8px}
+  .how b{
+    display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;
+    background:var(--bg-2);border:1px solid var(--line);color:var(--ink);font-size:12px;
+  }
+
+  .banner{
+    margin:14px auto 0;max-width:560px;padding:10px 14px;border-radius:12px;
+    background:#2a2116;border:1px dashed #6b4a22;color:#f3c58e;font-size:13px;text-align:center;
+  }
+
+  /* grid */
+  .grid{
+    display:grid;gap:18px;margin:26px 0 40px;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  }
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;position:relative;transition:transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .card.picked{border-color:var(--pumpkin);box-shadow:0 0 0 1px var(--pumpkin), 0 12px 40px -12px rgba(255,122,26,.45)}
+  .photo{
+    position:relative;aspect-ratio:4/5;background:#2b241d;overflow:hidden;
+    border:0;padding:0;width:100%;display:block;cursor:zoom-in;
+  }
+  .photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+  .card:hover .photo img{transform:scale(1.03)}
+  .photo .ph{
+    position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+    color:#7d6e5c;font-size:14px;padding:20px;
+  }
+  .photo .ph span{font-size:54px;display:block;margin-bottom:6px;filter:grayscale(.2)}
+  .medal{
+    position:absolute;top:12px;left:12px;
+    padding:7px 12px 7px 9px;border-radius:999px;font-weight:700;font-size:13px;
+    display:flex;align-items:center;gap:6px;color:#1b130c;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+    transform:scale(.6);opacity:0;transition:transform .25s cubic-bezier(.3,1.6,.5,1), opacity .2s;
+  }
+  .medal.on{transform:scale(1);opacity:1}
+  .medal i{font-style:normal;display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.18);font-size:11px}
+  .r1{background:var(--gold)} .r2{background:var(--silver)} .r3{background:var(--bronze)}
+
+  .body{padding:14px 16px 16px}
+  .name{font-family:"Fraunces",Georgia,serif;font-size:23px;font-weight:600;margin:0}
+  .cap{color:var(--muted);font-size:14px;margin:4px 0 0;line-height:1.4;min-height:1.4em}
+  .ranks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+  .rank{
+    background:var(--bg-2);border:1px solid var(--line);color:var(--ink);
+    padding:11px 0;border-radius:12px;font-weight:700;font-size:14px;
+    transition:background .15s,border-color .15s,color .15s,transform .1s;
+  }
+  .rank:active{transform:scale(.96)}
+  .rank:hover{border-color:#5a4c3e}
+  .rank.sel.r1b{background:var(--gold);border-color:var(--gold);color:#1b130c}
+  .rank.sel.r2b{background:var(--silver);border-color:var(--silver);color:#1b130c}
+  .rank.sel.r3b{background:var(--bronze);border-color:var(--bronze);color:#1b130c}
+
+  /* tray */
+  .tray{
+    position:fixed;left:0;right:0;bottom:0;z-index:20;
+    background:rgba(20,17,15,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);
+    padding:12px 0 calc(12px + env(safe-area-inset-bottom));
+  }
+  .tray .wrap{display:flex;align-items:center;gap:12px}
+  .slots{display:flex;gap:8px;flex:1;min-width:0}
+  .slot{
+    flex:1;min-width:0;display:flex;align-items:center;gap:8px;
+    padding:6px 8px;border-radius:12px;border:1px dashed var(--line);font-size:13px;color:var(--muted);
+    background:none;text-align:left;
+  }
+  .slot.full{border-style:solid;color:var(--ink);background:var(--bg-2)}
+  .slot .dot{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;color:#1b130c;overflow:hidden;background-size:cover;background-position:center}
+  .slot .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .go{
+    flex:none;border:0;border-radius:14px;padding:14px 20px;font-weight:700;font-size:15px;
+    background:var(--pumpkin);color:#1b130c;transition:background .15s, opacity .15s;
+  }
+  .go:hover{background:var(--pumpkin-deep)}
+  .go:disabled{opacity:.35;cursor:not-allowed;background:var(--pumpkin)}
+  @media (max-width:560px){
+    .slot .lbl{display:none}
+    .slot{flex:none;padding:4px}
+    .slots{gap:6px}
+    .go{flex:1}
+  }
+
+  /* modal */
+  .scrim{
+    position:fixed;inset:0;z-index:40;background:rgba(8,6,5,.72);
+    display:none;align-items:flex-end;justify-content:center;
+  }
+  .scrim.open{display:flex}
+  @media (min-width:640px){.scrim{align-items:center}}
+  .sheet{
+    width:100%;max-width:480px;background:var(--bg-2);border:1px solid var(--line);
+    border-radius:22px 22px 0 0;padding:24px 22px calc(24px + env(safe-area-inset-bottom));
+    animation:up .25s ease-out;max-height:92vh;overflow:auto;
+  }
+  @media (min-width:640px){.sheet{border-radius:22px}}
+  @keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+  .sheet h2{font-family:"Fraunces",Georgia,serif;font-size:28px;margin:0 0 4px;font-weight:600}
+  .sheet .sub{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .ballot{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:8px}
+  .ballot li{display:flex;align-items:center;gap:12px;padding:8px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+  .ballot .thumb{width:44px;height:44px;border-radius:10px;background:#2b241d center/cover;flex:none}
+  .ballot .place{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  .ballot .pn{font-weight:700}
+  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+  input{
+    width:100%;padding:14px;border-radius:12px;border:1px solid var(--line);
+    background:var(--bg);color:var(--ink);font:inherit;font-size:16px;margin-bottom:14px;
+  }
+  input:focus{outline:2px solid var(--pumpkin);outline-offset:1px;border-color:transparent}
+  .fine{font-size:12px;color:#8a7d6c;margin:-4px 0 18px;line-height:1.45}
+  .err{color:#ff9c7a;font-size:14px;margin:0 0 12px;min-height:0}
+  .row{display:flex;gap:10px}
+  .ghost{background:none;border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:14px 18px;font-weight:600}
+  .row .go{flex:1}
+
+  /* states */
+  .state{text-align:center;padding:60px 20px 80px;max-width:520px;margin:0 auto}
+  .state .big{font-size:64px}
+  .state h2{font-family:"Fraunces",Georgia,serif;font-size:34px;margin:10px 0 8px;font-weight:600}
+  .state p{color:var(--muted);line-height:1.55}
+  .state .ballot{text-align:left;margin-top:22px}
+  .spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--pumpkin);animation:spin 1s linear infinite;margin:0 auto}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* lightbox */
+  .lb{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:20px}
+  .lb.open{display:flex}
+  .lb img{max-width:100%;max-height:86vh;border-radius:12px}
+  .lb .x{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.12);color:#fff;border:0;width:42px;height:42px;border-radius:50%;font-size:22px}
+  .lb .t{position:absolute;bottom:20px;left:0;right:0;text-align:center;font-family:"Fraunces",Georgia,serif;font-size:22px}
+
+  footer{text-align:center;color:#6f6355;font-size:12px;padding:0 0 30px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow">The Shipyard</div>
+  <h1>Halloween <em>Pet</em> Photo Shoot</h1>
+  <p class="lede">The costumes are in. Now it's your call. Pick your top three favorites.</p>
+  <ul class="how">
+    <li><b>1</b> Scroll the lineup</li>
+    <li><b>2</b> Tap 1st, 2nd and 3rd</li>
+    <li><b>3</b> Submit your vote</li>
+  </ul>
+  <div id="banner" class="banner" hidden></div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="state"><div class="spinner"></div></div>
+</main>
+
+<footer class="wrap">One vote per person. Winners announced soon.</footer>
+
+<div class="tray" id="tray" hidden>
+  <div class="wrap">
+    <div class="slots" id="slots"></div>
+    <button class="go" id="next" disabled>Pick 3</button>
+  </div>
+</div>
+
+<div class="scrim" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <form class="sheet" id="form" novalidate>
+    <h2 id="mTitle">Your ballot</h2>
+    <p class="sub">Double check your picks, then add your name and email.</p>
+    <ul class="ballot" id="mBallot"></ul>
+    <label for="fName">Your name</label>
+    <input id="fName" name="name" autocomplete="name" required>
+    <label for="fEmail">Email</label>
+    <input id="fEmail" name="email" type="email" inputmode="email" autocomplete="email" required>
+    <p class="fine">Used only to make sure everyone votes once.</p>
+    <p class="err" id="fErr" role="alert"></p>
+    <div class="row">
+      <button type="button" class="ghost" id="back">Back</button>
+      <button type="submit" class="go" id="submit">Submit vote</button>
+    </div>
+  </form>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true">
+  <button class="x" id="lbx" aria-label="Close">&times;</button>
+  <img id="lbimg" alt="">
+  <div class="t" id="lbt"></div>
+</div>
+
+<script>
+(() => {
+  const PLACES = ["1st", "2nd", "3rd"];
+  const STORE_KEY = "shipyard-halloween-vote";
+  const DEMO = !SCRIPT_URL;
+
+  const DEMO_PETS = [
+    { name: "Biscuit", caption: "Pumpkin spice everything", photo: "" },
+    { name: "Luna", caption: "Witch on a leash", photo: "" },
+    { name: "Mochi", caption: "Tiny dragon, big attitude", photo: "" },
+    { name: "Rocco", caption: "Hot dog (literally)", photo: "" },
+    { name: "Pepper", caption: "Bumblebee", photo: "" },
+    { name: "Juno", caption: "Ghost of Halloween past", photo: "" }
+  ];
+
+  let pets = [];
+  let picks = [null, null, null]; // pet names by place
+  let need = 3;
+
+  const $ = s => document.querySelector(s);
+  const main = $("#main"), tray = $("#tray"), slots = $("#slots"), nextBtn = $("#next");
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  const petBy = n => pets.find(p => p.name === n);
+
+  function shuffle(a) {
+    // Shuffle once per visitor so nobody gets an edge from being first in line.
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function saved() { try { return JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { return null; } }
+  function save(v) { try { localStorage.setItem(STORE_KEY, JSON.stringify(v)); } catch (e) {} }
+
+  async function load() {
+    if (DEMO) {
+      const b = $("#banner");
+      b.hidden = false;
+      b.textContent = "Preview mode: sample pets shown and votes are not saved. Add your Google Script URL to go live.";
+    }
+    const prior = saved();
+    if (prior && !DEMO) return showThanks(prior, true);
+
+    try {
+      let data;
+      if (DEMO) data = { ok: true, open: true, pets: DEMO_PETS };
+      else {
+        const res = await fetch(SCRIPT_URL, { method: "GET" });
+        data = await res.json();
+      }
+      if (!data.open) return showState("🕯️", "Voting is closed", "Thanks for stopping by. Winners will be announced soon!");
+      pets = shuffle((data.pets || []).slice());
+      if (!pets.length) return showState("🐾", "The lineup is coming", "Photos are being added now. Check back in a bit!");
+      need = Math.min(3, pets.length);
+      renderGrid();
+      renderTray();
+    } catch (err) {
+      showState("👻", "Couldn't load the lineup", "Check your connection and refresh the page.");
+    }
+  }
+
+  function photoHTML(p) {
+    if (p.photo) return `<img src="${esc(p.photo)}" alt="${esc(p.name)} in costume" loading="lazy">`;
+    return `<div class="ph"><div><span>🐶</span>Photo coming soon</div></div>`;
+  }
+
+  function renderGrid() {
+    main.innerHTML = `<section class="grid" id="grid">` + pets.map((p, i) => `
+      <article class="card" data-i="${i}">
+        <button class="photo" type="button" data-zoom="${i}" aria-label="View ${esc(p.name)} larger">
+          ${photoHTML(p)}
+          <div class="medal"></div>
+        </button>
+        <div class="body">
+          <h3 class="name">${esc(p.name)}</h3>
+          <p class="cap">${esc(p.caption || "")}</p>
+          <div class="ranks" role="group" aria-label="Rank ${esc(p.name)}">
+            ${PLACES.slice(0, need).map((pl, r) =>
+              `<button type="button" class="rank r${r+1}b" data-i="${i}" data-r="${r}" aria-pressed="false">${pl}</button>`
+            ).join("")}
+          </div>
+        </div>
+      </article>`).join("") + `</section>`;
+    syncCards();
+  }
+
+  function syncCards() {
+    document.querySelectorAll(".card").forEach(card => {
+      const p = pets[+card.dataset.i];
+      const r = picks.indexOf(p.name);
+      card.classList.toggle("picked", r > -1);
+      const medal = card.querySelector(".medal");
+      medal.className = "medal" + (r > -1 ? ` on r${r+1}` : "");
+      medal.innerHTML = r > -1 ? `<i>${r+1}</i>${PLACES[r]} place` : "";
+      card.querySelectorAll(".rank").forEach(b => {
+        const on = +b.dataset.r === r;
+        b.classList.toggle("sel", on);
+        b.setAttribute("aria-pressed", on);
+      });
+    });
+  }
+
+  function renderTray() {
+    tray.hidden = false;
+    slots.innerHTML = PLACES.slice(0, need).map((pl, r) => {
+      const p = picks[r] && petBy(picks[r]);
+      const bg = p && p.photo ? `background-image:url('${esc(p.photo)}')` : "";
+      const col = ["var(--gold)", "var(--silver)", "var(--bronze)"][r];
+      return `<button type="button" class="slot ${p ? "full" : ""}" data-jump="${p ? esc(p.name) : ""}" aria-label="${pl} place: ${p ? esc(p.name) : "empty"}">
+        <span class="dot" style="background-color:${col};${bg}">${p && p.photo ? "" : r+1}</span>
+        <span class="lbl">${p ? esc(p.name) : pl + " place"}</span>
+      </button>`;
+    }).join("");
+    const count = picks.slice(0, need).filter(Boolean).length;
+    nextBtn.disabled = count < need;
+    nextBtn.textContent = count < need ? `Pick ${need - count} more` : "Review & vote";
+    requestAnimationFrame(() => document.documentElement.style.setProperty("--tray-h", tray.offsetHeight + "px"));
+  }
+
+  function choose(i, r) {
+    const name = pets[i].name;
+    if (picks[r] === name) picks[r] = null;          // tap again to clear
+    else {
+      const prev = picks.indexOf(name);
+      if (prev > -1) picks[prev] = null;              // move this pet to the new place
+      picks[r] = name;                                // replaces whoever held it
+    }
+    syncCards();
+    renderTray();
+  }
+
+  function ballotHTML(list) {
+    return list.map((n, r) => {
+      const p = petBy(n) || { name: n };
+      const bg = p.photo ? `style="background-image:url('${esc(p.photo)}')"` : "";
+      return `<li><div class="thumb" ${bg}></div><div><div class="place">${PLACES[r]} place</div><div class="pn">${esc(p.name)}</div></div></li>`;
+    }).join("");
+  }
+
+  function openModal() {
+    $("#mBallot").innerHTML = ballotHTML(picks.slice(0, need));
+    $("#fErr").textContent = "";
+    $("#modal").classList.add("open");
+    setTimeout(() => $("#fName").focus(), 50);
+  }
+  function closeModal() { $("#modal").classList.remove("open"); }
+
+  async function submit(e) {
+    e.preventDefault();
+    const name = $("#fName").value.trim();
+    const email = $("#fEmail").value.trim();
+    const err = $("#fErr");
+    if (!name) { err.textContent = "Please enter your name."; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { err.textContent = "Please enter a valid email."; return; }
+
+    const btn = $("#submit");
+    btn.disabled = true; btn.textContent = "Sending...";
+    err.textContent = "";
+    const ballot = picks.slice(0, need);
+    try {
+      let data;
+      if (DEMO) { await new Promise(r => setTimeout(r, 600)); data = { ok: true }; }
+      else {
+        // text/plain keeps this a "simple" request so Google accepts it without CORS preflight.
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ name, email, picks: ballot })
+        });
+        data = await res.json();
+      }
+      if (!data.ok) throw new Error(data.error || "Something went wrong. Please try again.");
+      const record = { ballot, pets: ballot.map(n => petBy(n)) };
+      if (!DEMO) save(record);
+      closeModal();
+      showThanks(record, false);
+    } catch (x) {
+      err.textContent = x.message && !/fetch|network/i.test(x.message) ? x.message : "Couldn't send your vote. Check your connection and try again.";
+    } finally {
+      btn.disabled = false; btn.textContent = "Submit vote";
+    }
+  }
+
+  function showThanks(rec, returning) {
+    tray.hidden = true;
+    document.documentElement.style.setProperty("--tray-h", "0px");
+    if (rec.pets) rec.pets.forEach(p => { if (p && !petBy(p.name)) pets.push(p); });
+    main.innerHTML = `<div class="state">
+      <div class="big">🎃</div>
+      <h2>${returning ? "You already voted!" : "Your vote is in!"}</h2>
+      <p>Thanks for voting in the Shipyard Halloween Pet Photo Shoot. Winners will be announced soon.</p>
+      <ul class="ballot">${ballotHTML(rec.ballot)}</ul>
+    </div>`;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showState(icon, title, msg) {
+    tray.hidden = true;
+    main.innerHTML = `<div class="state"><div class="big">${icon}</div><h2>${esc(title)}</h2><p>${esc(msg)}</p></div>`;
+  }
+
+  // events
+  main.addEventListener("click", e => {
+    const rb = e.target.closest(".rank");
+    if (rb) return choose(+rb.dataset.i, +rb.dataset.r);
+    const z = e.target.closest("[data-zoom]");
+    if (z) {
+      const p = pets[+z.dataset.zoom];
+      if (!p.photo) return;
+      $("#lbimg").src = p.photo; $("#lbimg").alt = p.name; $("#lbt").textContent = p.name;
+      $("#lb").classList.add("open");
+    }
+  });
+  slots.addEventListener("click", e => {
+    const s = e.target.closest("[data-jump]");
+    if (!s || !s.dataset.jump) return;
+    const i = pets.findIndex(p => p.name === s.dataset.jump);
+    const card = document.querySelector(`.card[data-i="${i}"]`);
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  nextBtn.addEventListener("click", openModal);
+  $("#back").addEventListener("click", closeModal);
+  $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
+  $("#form").addEventListener("submit", submit);
+  $("#lbx").addEventListener("click", () => $("#lb").classList.remove("open"));
+  $("#lb").addEventListener("click", e => { if (e.target.id === "lb") $("#lb").classList.remove("open"); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") { closeModal(); $("#lb").classList.remove("open"); }
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
